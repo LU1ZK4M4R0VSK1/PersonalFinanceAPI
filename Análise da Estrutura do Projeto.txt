@@ -1,0 +1,40 @@
+### Análise da Estrutura do Projeto
+
+
+  Este projeto é uma API web para finanças pessoais, construída com .NET 8 e C#. Ele utiliza uma abordagem de "Minimal APIs", que é um
+  estilo mais recente e conciso para criar APIs em .NET.
+
+  ---
+
+  #### 1. Qual é a função de cada pasta e subpasta.
+
+
+   - `/` (Raiz do Projeto): Contém os arquivos de configuração e o ponto de entrada da aplicação.
+   - `/Data`: Responsável pela camada de acesso a dados.
+   - `/Dtos` (Data Transfer Objects): Contém classes simples que servem para transferir dados entre a API e os clientes. Eles ajudam a modelar
+     os dados que a API espera receber (requests) e os que ela envia de volta (responses).
+   - `/Endpoints`: Organiza a lógica dos endpoints da API. Em vez de usar Controllers (como no padrão MVC tradicional), o projeto agrupa os
+     endpoints por funcionalidade em classes estáticas.
+   - `/Migrations`: Contém os arquivos gerados pelo Entity Framework Core para gerenciar as alterações no esquema do banco de dados. Cada
+     arquivo aqui representa uma "migração" que pode ser aplicada ou revertida.
+   - `/Models`: Contém as classes de domínio que representam as entidades principais do sistema. O Entity Framework Core usa essas classes
+     para criar as tabelas no banco de dados.
+   - `/bin` e `/obj`: Pastas geradas pelo processo de compilação do .NET. Elas contêm os arquivos binários (DLLs, executáveis) e arquivos
+     intermediários necessários para rodar a aplicação. Você geralmente não precisa mexer nelas.
+   - `Program.cs`: É o ponto de entrada da aplicação. Ele:
+   - `Data/AppDbContext.cs`: É a representação do banco de dados em código. Ele define quais modelos (User, Category, Transaction) se tornarão
+     tabelas e como elas se relacionam. Também contém a lógica para popular o banco com dados iniciais (as categorias padrão).
+   - Arquivos em `/Dtos`: São "contratos" de dados. Eles garantem que a API receba os dados no formato esperado e que os clientes saibam o que
+     esperar como resposta, desacoplando os modelos internos do banco de dados da interface pública da API.
+   - Arquivos em `/Endpoints`: Contêm a lógica de cada endpoint. Por exemplo, TransactionEndpoints.cs tem métodos que recebem uma requisição
+     HTTP, usam o AppDbContext para buscar ou salvar dados no banco e retornam uma resposta apropriada (como um objeto, um status 200 OK ou um
+     erro 404 Not Found).
+   - Arquivos em `/Models`: São as classes que definem a estrutura dos dados da sua aplicação. Eles são a "fonte da verdade" para o formato
+     dos dados no banco.
+  A organização do projeto segue princípios de separação de responsabilidades (Separation of Concerns), o que traz vários benefícios:
+
+
+   - Manutenção: É fácil encontrar o que você precisa. Se há um bug na lógica de criação de transações, você sabe que o problema provavelmente
+     está em TransactionEndpoints.cs. Se precisar alterar um campo na tabela de usuários, você vai direto em Models/User.cs.
+   - Minimal APIs: Em vez da estrutura mais verbosa do MVC (Model-View-Controller), o projeto usa Minimal APIs. A lógica do controller é
+     movida para os arquivos de Endpoints, resultando em um código mais enxuto e direto para APIs.

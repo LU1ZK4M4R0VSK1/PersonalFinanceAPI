@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "clGMsVlHzJtXwqXUNR+YTNQbm1qowoHngxGCHt0KmIQ=",
+  "Source": "PersonalFinanceApi",
+  "BasePath": "_content/PersonalFinanceApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

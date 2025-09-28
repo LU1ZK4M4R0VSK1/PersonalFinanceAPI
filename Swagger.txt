@@ -1,0 +1,81 @@
+ 1. Pare a execução atual da aplicação (se estiver rodando) pressionando Ctrl + C no terminal.
+  `bash
+      dotnet run
+      `
+  3.  Acesse a interface do Swagger no seu navegador (http://localhost:5051 ou similar). Você verá um novo
+  grupo chamado Users.
+
+  Fluxo de Teste Completo:
+
+
+   1. Crie um Usuário:
+   2. Crie uma Transação:
+   3. Verifique o Dashboard:
+  Agora você deve conseguir testar todo o fluxo do sistema.
+
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│  > Como voce me recomendaria criar o usuario e as transações? Como faço para deletar tudo para recomeçar ou │
+│     deletar apenas 1 usuario ou apenas 1 transação?                                                         │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+✦ Excelente pergunta. Vou detalhar o fluxo recomendado para criar e deletar dados usando a API.
+
+  ### Como Criar Usuários e Transações (Fluxo Recomendado)
+
+  Siga esta sequência para manter os dados organizados.
+
+  #### Passo 1: Criar um novo Usuário
+
+
+   1. Na interface do Swagger, vá até o grupo `Users` e expanda o endpoint `POST /users`.
+  `json
+      {
+        "name": "Maria Silva",
+        "email": "maria.silva@example.com"
+      }
+      `
+  4.  Clique em "Execute".
+  5.  Na resposta (Response body), você receberá os dados do usuário criado, incluindo o id dele. Copie este
+   `id`, pois você precisará dele no próximo passo.
+
+  #### Passo 2: Criar Transações para este Usuário
+
+
+   1. Agora, vá ao grupo `Transactions` e expanda o endpoint `POST /transactions`.
+  `json
+      {
+        "description": "Pagamento do Aluguel",
+        "amount": 1500,
+        "date": "2025-09-22T12:00:00Z",
+        "categoryId": 3,
+        "userId": 1
+      }
+      `
+      Lembre-se de trocar o `userId` pelo ID que você obteve.
+
+  4.  Clique em "Execute". Repita este passo para quantas transações quiser criar.
+
+  ---
+
+  ### Como Deletar Dados
+
+  #### Para Deletar apenas 1 Transação
+
+  Você pode usar o endpoint DELETE /transactions/{id}.
+
+
+   1. Primeiro, você precisa saber o id da transação que quer deletar. Você pode listar todas as transações de
+      um usuário com o endpoint GET /transactions/user/{userId} para encontrar o id.
+  Atualmente, não há um endpoint para deletar um usuário específico. No entanto, o banco de dados está
+  configurado para que, ao deletar um usuário, todas as transações associadas a ele sejam automaticamente
+  excluídas (efeito cascata).
+
+  Posso adicionar o endpoint DELETE /users/{id} para você, se desejar.
+
+  #### Para Deletar TUDO e Recomeçar
+
+  Esta é a maneira mais eficaz de limpar o ambiente de teste e começar do zero.
+
+
+   1. Pare a aplicação (pressione Ctrl + C no terminal onde ela está rodando).
+  Após esses passos, seu banco de dados estará como novo, pronto para recomeçar os testes

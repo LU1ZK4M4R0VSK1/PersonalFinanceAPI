@@ -1,35 +1,44 @@
-using Microsoft.EntityFrameworkCore;
 using PersonalFinanceApi.Data;
 using PersonalFinanceApi.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace PersonalFinanceApi.Endpoints;
-
-/// <summary>
-/// Mapeia os endpoints relacionados a categorias.
-/// </summary>
-public static class CategoryEndpoints
+namespace PersonalFinanceApi.Endpoints
 {
-    /// <summary>
-    /// Mapeia todos os endpoints de categoria para a aplicação web.
-    /// </summary>
-    /// <param name="app">A aplicação web.</param>
-    public static void MapCategoryEndpoints(this WebApplication app)
+    public static class CategoryEndpoints
     {
-        var group = app.MapGroup("/categories").WithTags("Categories");
 
-        /// <summary>
-        /// Obtém todas as categorias.
-        /// </summary>
-        group.MapGet("/", async (AppDbContext context) =>
+        public static void MapCategoryEndpoints(this WebApplication app)
         {
-            var categories = await context.Categories
-                .AsNoTracking()
-                .ToListAsync();
+            var group = app.MapGroup("/categories").WithTags("Categories");
 
-            return Results.Ok(categories);
-        })
-        .WithName("GetCategories")
-        .Produces<List<Category>>()
-        .WithOpenApi();
+            group.MapGet("/", async (AppDbContext context) =>
+            {
+                var categories = await context.Categories.ToListAsync();
+                return Results.Ok(categories);
+            })
+            .WithName("GetAllCategories")
+            .WithOpenApi();
+
+            group.MapPost("/", async (CreateCategoryRequest request, AppDbContext context) =>
+            {
+                var category = new Category
+                {
+                    Name = request.Name,
+                    Color = request.Color
+                };
+
+                await context.Categories.AddAsync(category);
+                await context.SaveChangesAsync();
+                return Results.Created($"/categories/{category.Id}", category);
+            })
+            .WithName("CreateCategory")
+            .WithOpenApi();
+        }
+    }
+
+    public class CreateCategoryRequest
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
     }
 }

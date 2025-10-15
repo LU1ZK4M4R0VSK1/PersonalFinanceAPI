@@ -1,52 +1,36 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceApi.Data;
-using PersonalFinanceApi.Endpoints;
+using PersonalFinanceApi.Services;
+using PersonalFinanceApi.Extensions; 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Adiciona serviços ao contêiner.
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    // Configura o Swagger para usar comentários XML.
-    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
-
-// Adiciona ProblemDetails para respostas de erro HTTP padronizadas.
-builder.Services.AddProblemDetails();
-
-// Adiciona AppDbContext para o Entity Framework Core.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<FinancialService>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 2. Configura o pipeline de requisições HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Personal Finance API V1");
-        c.RoutePrefix = string.Empty; // Define a UI do Swagger na raiz da aplicação
-    });
+    app.UseSwaggerUI();
 }
-
-// Habilita o tratamento padronizado de códigos de status.
-app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
 
-// 3. Mapeia os endpoints da API.
-app.MapTransactionEndpoints();
-app.MapCategoryEndpoints();
-app.MapDashboardEndpoints();
 app.MapUserEndpoints();
+app.MapCategoryEndpoints();
+app.MapTransactionEndpoints();
+app.MapFinancialEndpoints();
 
-// Um endpoint raiz simples para dar as boas-vindas aos usuários.
-app.MapGet("/", () => Results.Redirect("/index.html", permanent: false))
-   .ExcludeFromDescription(); // Ocultar do Swagger
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 app.Run();

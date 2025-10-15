@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Faculdade Engenharia de Software\\Desenvolvimento de software visual\\Projeto Final - Desenvolvimento de Software Visual - Segunda Feira Noite\\PersonalFinanceApi\\PersonalFinanceApi.csproj": {}
+    "C:\\Users\\luani\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj": {}
   },
   "projects": {
-    "D:\\Faculdade Engenharia de Software\\Desenvolvimento de software visual\\Projeto Final - Desenvolvimento de Software Visual - Segunda Feira Noite\\PersonalFinanceApi\\PersonalFinanceApi.csproj": {
+    "C:\\Users\\luani\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Faculdade Engenharia de Software\\Desenvolvimento de software visual\\Projeto Final - Desenvolvimento de Software Visual - Segunda Feira Noite\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
+        "projectUniqueName": "C:\\Users\\luani\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
         "projectName": "PersonalFinanceApi",
-        "projectPath": "D:\\Faculdade Engenharia de Software\\Desenvolvimento de software visual\\Projeto Final - Desenvolvimento de Software Visual - Segunda Feira Noite\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "D:\\Faculdade Engenharia de Software\\Desenvolvimento de software visual\\Projeto Final - Desenvolvimento de Software Visual - Segunda Feira Noite\\PersonalFinanceApi\\obj\\",
+        "projectPath": "C:\\Users\\luani\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
+        "packagesPath": "C:\\Users\\luani\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\luani\\PersonalFinanceAPI\\PersonalFinanceApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\luani\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -85,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.121/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

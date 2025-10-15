@@ -4,191 +4,105 @@
         <name>PersonalFinanceApi</name>
     </assembly>
     <members>
-        <member name="T:PersonalFinanceApi.Data.AppDbContext">
-            <summary>
-            The database context for the application.
-            </summary>
-        </member>
-        <member name="M:PersonalFinanceApi.Data.AppDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{PersonalFinanceApi.Data.AppDbContext})">
-            <summary>
-            Initializes a new instance of the <see cref="T:PersonalFinanceApi.Data.AppDbContext"/> class.
-            </summary>
-            <param name="options">The options for this context.</param>
-        </member>
-        <member name="P:PersonalFinanceApi.Data.AppDbContext.Users">
-            <summary>
-            Gets or sets the set of users.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Data.AppDbContext.Categories">
-            <summary>
-            Gets or sets the set of categories.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Data.AppDbContext.Transactions">
-            <summary>
-            Gets or sets the set of transactions.
-            </summary>
-        </member>
-        <member name="M:PersonalFinanceApi.Data.AppDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <summary>
-            Configures the schema needed for the identity framework.
-            </summary>
-            <param name="modelBuilder">The builder being used to construct the model for this context.</param>
-        </member>
         <member name="T:PersonalFinanceApi.Dtos.CreateTransactionRequest">
             <summary>
-            Represents the request to create a new transaction.
+            Representa a requisição para criar uma nova transação.
             </summary>
-            <param name="Description">The description of the transaction.</param>
-            <param name="Amount">The monetary value of the transaction.</param>
-            <param name="Date">The date of the transaction.</param>
-            <param name="CategoryId">The ID of the category for this transaction.</param>
-            <param name="UserId">The ID of the user for this transaction.</param>
+            <param name="Description">A descrição da transação.</param>
+            <param name="Amount">O valor monetário da transação.</param>
+            <param name="Date">A data da transação.</param>
+            <param name="CategoryId">O ID da categoria para esta transação.</param>
+            <param name="UserId">O ID do usuário para esta transação.</param>
         </member>
         <member name="M:PersonalFinanceApi.Dtos.CreateTransactionRequest.#ctor(System.String,System.Decimal,System.DateTime,System.Int32,System.Int32)">
             <summary>
-            Represents the request to create a new transaction.
+            Representa a requisição para criar uma nova transação.
             </summary>
-            <param name="Description">The description of the transaction.</param>
-            <param name="Amount">The monetary value of the transaction.</param>
-            <param name="Date">The date of the transaction.</param>
-            <param name="CategoryId">The ID of the category for this transaction.</param>
-            <param name="UserId">The ID of the user for this transaction.</param>
+            <param name="Description">A descrição da transação.</param>
+            <param name="Amount">O valor monetário da transação.</param>
+            <param name="Date">A data da transação.</param>
+            <param name="CategoryId">O ID da categoria para esta transação.</param>
+            <param name="UserId">O ID do usuário para esta transação.</param>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.CreateTransactionRequest.Description">
-            <summary>The description of the transaction.</summary>
+            <summary>A descrição da transação.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.CreateTransactionRequest.Amount">
-            <summary>The monetary value of the transaction.</summary>
+            <summary>O valor monetário da transação.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.CreateTransactionRequest.Date">
-            <summary>The date of the transaction.</summary>
+            <summary>A data da transação.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.CreateTransactionRequest.CategoryId">
-            <summary>The ID of the category for this transaction.</summary>
+            <summary>O ID da categoria para esta transação.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.CreateTransactionRequest.UserId">
-            <summary>The ID of the user for this transaction.</summary>
+            <summary>O ID do usuário para esta transação.</summary>
         </member>
         <member name="T:PersonalFinanceApi.Dtos.CreateUserRequest">
             <summary>
-            Represents the request to create a new user.
+            Representa a requisição para criar um novo usuário.
             </summary>
-            <param name="Name">The user's name.</param>
-            <param name="Email">The user's email address.</param>
+            <param name="Name">O nome do usuário.</param>
+            <param name="Email">O endereço de e-mail do usuário.</param>
         </member>
         <member name="M:PersonalFinanceApi.Dtos.CreateUserRequest.#ctor(System.String,System.String)">
             <summary>
-            Represents the request to create a new user.
+            Representa a requisição para criar um novo usuário.
             </summary>
-            <param name="Name">The user's name.</param>
-            <param name="Email">The user's email address.</param>
+            <param name="Name">O nome do usuário.</param>
+            <param name="Email">O endereço de e-mail do usuário.</param>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.CreateUserRequest.Name">
-            <summary>The user's name.</summary>
+            <summary>O nome do usuário.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.CreateUserRequest.Email">
-            <summary>The user's email address.</summary>
+            <summary>O endereço de e-mail do usuário.</summary>
         </member>
         <member name="T:PersonalFinanceApi.Dtos.TransactionResponse">
             <summary>
-            Represents the response for a transaction.
+            Representa a resposta para uma transação.
             </summary>
-            <param name="Id">The unique identifier of the transaction.</param>
-            <param name="Description">The description of the transaction.</param>
-            <param name="Amount">The monetary value of the transaction.</param>
-            <param name="Date">The date of the transaction.</param>
-            <param name="Type">The type of the transaction (Income or Expense).</param>
-            <param name="CategoryName">The name of the category.</param>
-            <param name="CategoryId">The ID of the category.</param>
+            <param name="Id">O identificador único da transação.</param>
+            <param name="Description">A descrição da transação.</param>
+            <param name="Amount">O valor monetário da transação.</param>
+            <param name="Date">A data da transação.</param>
+            <param name="Type">O tipo da transação (Receita ou Despesa).</param>
+            <param name="CategoryName">O nome da categoria.</param>
+            <param name="CategoryId">O ID da categoria.</param>
         </member>
         <member name="M:PersonalFinanceApi.Dtos.TransactionResponse.#ctor(System.Int32,System.String,System.Decimal,System.DateTime,PersonalFinanceApi.Models.TransactionType,System.String,System.Int32)">
             <summary>
-            Represents the response for a transaction.
+            Representa a resposta para uma transação.
             </summary>
-            <param name="Id">The unique identifier of the transaction.</param>
-            <param name="Description">The description of the transaction.</param>
-            <param name="Amount">The monetary value of the transaction.</param>
-            <param name="Date">The date of the transaction.</param>
-            <param name="Type">The type of the transaction (Income or Expense).</param>
-            <param name="CategoryName">The name of the category.</param>
-            <param name="CategoryId">The ID of the category.</param>
+            <param name="Id">O identificador único da transação.</param>
+            <param name="Description">A descrição da transação.</param>
+            <param name="Amount">O valor monetário da transação.</param>
+            <param name="Date">A data da transação.</param>
+            <param name="Type">O tipo da transação (Receita ou Despesa).</param>
+            <param name="CategoryName">O nome da categoria.</param>
+            <param name="CategoryId">O ID da categoria.</param>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.TransactionResponse.Id">
-            <summary>The unique identifier of the transaction.</summary>
+            <summary>O identificador único da transação.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.TransactionResponse.Description">
-            <summary>The description of the transaction.</summary>
+            <summary>A descrição da transação.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.TransactionResponse.Amount">
-            <summary>The monetary value of the transaction.</summary>
+            <summary>O valor monetário da transação.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.TransactionResponse.Date">
-            <summary>The date of the transaction.</summary>
+            <summary>A data da transação.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.TransactionResponse.Type">
-            <summary>The type of the transaction (Income or Expense).</summary>
+            <summary>O tipo da transação (Receita ou Despesa).</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.TransactionResponse.CategoryName">
-            <summary>The name of the category.</summary>
+            <summary>O nome da categoria.</summary>
         </member>
         <member name="P:PersonalFinanceApi.Dtos.TransactionResponse.CategoryId">
-            <summary>The ID of the category.</summary>
-        </member>
-        <member name="T:PersonalFinanceApi.Endpoints.CategoryEndpoints">
-            <summary>
-            Maps category-related endpoints.
-            </summary>
-        </member>
-        <member name="M:PersonalFinanceApi.Endpoints.CategoryEndpoints.MapCategoryEndpoints(Microsoft.AspNetCore.Builder.WebApplication)">
-            <summary>
-            Maps all category endpoints to the web application.
-            </summary>
-            <param name="app">The web application.</param>
-        </member>
-        <member name="T:PersonalFinanceApi.Endpoints.DashboardResponse">
-            <summary>
-            Represents the response for the dashboard summary.
-            </summary>
-        </member>
-        <member name="M:PersonalFinanceApi.Endpoints.DashboardResponse.#ctor(System.Decimal,System.Decimal,System.Decimal)">
-            <summary>
-            Represents the response for the dashboard summary.
-            </summary>
-        </member>
-        <member name="T:PersonalFinanceApi.Endpoints.DashboardEndpoints">
-            <summary>
-            Maps dashboard-related endpoints.
-            </summary>
-        </member>
-        <member name="M:PersonalFinanceApi.Endpoints.DashboardEndpoints.MapDashboardEndpoints(Microsoft.AspNetCore.Builder.WebApplication)">
-            <summary>
-            Maps all dashboard endpoints to the web application.
-            </summary>
-            <param name="app">The web application.</param>
-        </member>
-        <member name="T:PersonalFinanceApi.Endpoints.TransactionEndpoints">
-            <summary>
-            Maps transaction-related endpoints.
-            </summary>
-        </member>
-        <member name="M:PersonalFinanceApi.Endpoints.TransactionEndpoints.MapTransactionEndpoints(Microsoft.AspNetCore.Builder.WebApplication)">
-            <summary>
-            Maps all transaction endpoints to the web application.
-            </summary>
-            <param name="app">The web application.</param>
-        </member>
-        <member name="T:PersonalFinanceApi.Endpoints.UserEndpoints">
-            <summary>
-            Maps user-related endpoints.
-            </summary>
-        </member>
-        <member name="M:PersonalFinanceApi.Endpoints.UserEndpoints.MapUserEndpoints(Microsoft.AspNetCore.Builder.WebApplication)">
-            <summary>
-            Maps all user endpoints to the web application.
-            </summary>
-            <param name="app">The web application.</param>
+            <summary>O ID da categoria.</summary>
         </member>
         <member name="T:PersonalFinanceApi.Migrations.InitialCreate">
             <inheritdoc />
@@ -202,120 +116,17 @@
         <member name="M:PersonalFinanceApi.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
-        <member name="T:PersonalFinanceApi.Models.Category">
-            <summary>
-            Represents a category for transactions.
-            </summary>
+        <member name="T:PersonalFinanceApi.Migrations.UpdateModels">
+            <inheritdoc />
         </member>
-        <member name="P:PersonalFinanceApi.Models.Category.Id">
-            <summary>
-            The unique identifier for the category.
-            </summary>
+        <member name="M:PersonalFinanceApi.Migrations.UpdateModels.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
         </member>
-        <member name="P:PersonalFinanceApi.Models.Category.Name">
-            <summary>
-            The name of the category.
-            </summary>
+        <member name="M:PersonalFinanceApi.Migrations.UpdateModels.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
         </member>
-        <member name="P:PersonalFinanceApi.Models.Category.Type">
-            <summary>
-            The type of transaction this category applies to (Income or Expense).
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Category.Transactions">
-            <summary>
-            The list of transactions associated with this category.
-            </summary>
-        </member>
-        <member name="T:PersonalFinanceApi.Models.Transaction">
-            <summary>
-            Represents a single financial transaction.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.Id">
-            <summary>
-            The unique identifier for the transaction.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.Description">
-            <summary>
-            A description of the transaction.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.Amount">
-            <summary>
-            The monetary value of the transaction.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.Date">
-            <summary>
-            The date and time the transaction occurred.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.Type">
-            <summary>
-            The type of the transaction (Income or Expense).
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.CategoryId">
-            <summary>
-            The foreign key for the associated category.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.Category">
-            <summary>
-            The navigation property for the associated category.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.UserId">
-            <summary>
-            The foreign key for the associated user.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.Transaction.User">
-            <summary>
-            The navigation property for the associated user.
-            </summary>
-        </member>
-        <member name="T:PersonalFinanceApi.Models.TransactionType">
-            <summary>
-            Defines the type of a transaction.
-            </summary>
-        </member>
-        <member name="F:PersonalFinanceApi.Models.TransactionType.Expense">
-            <summary>
-            A transaction that represents an expense.
-            </summary>
-        </member>
-        <member name="F:PersonalFinanceApi.Models.TransactionType.Income">
-            <summary>
-            A transaction that represents an income.
-            </summary>
-        </member>
-        <member name="T:PersonalFinanceApi.Models.User">
-            <summary>
-            Represents a user in the system.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.User.Id">
-            <summary>
-            The unique identifier for the user.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.User.Name">
-            <summary>
-            The user's name.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.User.Email">
-            <summary>
-            The user's email address.
-            </summary>
-        </member>
-        <member name="P:PersonalFinanceApi.Models.User.Transactions">
-            <summary>
-            The list of transactions associated with the user.
-            </summary>
+        <member name="M:PersonalFinanceApi.Migrations.UpdateModels.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
         </member>
     </members>
 </doc>

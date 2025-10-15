@@ -1,179 +1,120 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MiniValidation;
 using PersonalFinanceApi.Data;
-using PersonalFinanceApi.Dtos;
 using PersonalFinanceApi.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace PersonalFinanceApi.Endpoints;
-
-/// <summary>
-/// Mapeia os endpoints relacionados a transações.
-/// </summary>
-public static class TransactionEndpoints
+namespace PersonalFinanceApi.Endpoints
 {
-    /// <summary>
-    /// Mapeia todos os endpoints de transação para a aplicação web.
-    /// </summary>
-    /// <param name="app">A aplicação web.</param>
-    public static void MapTransactionEndpoints(this WebApplication app)
+    public static class TransactionEndpoints
     {
-        var group = app.MapGroup("/transactions").WithTags("Transactions");
-
-        /// <summary>
-        /// Obtém todas as transações para um usuário específico.
-        /// </summary>
-        group.MapGet("/user/{userId}", async (int userId, AppDbContext context) =>
+        public static void MapTransactionEndpoints(this WebApplication app)
         {
-            var transactions = await context.Transactions
-                .AsNoTracking()
-                .Where(t => t.UserId == userId)
-                .Include(t => t.Category)
-                .Select(t => new TransactionResponse(
-                    t.Id,
-                    t.Description,
-                    t.Amount,
-                    t.Date,
-                    t.Type,
-                    t.Category.Name,
-                    t.CategoryId))
-                .ToListAsync();
+            var group = app.MapGroup("/transactions").WithTags("Transactions");
 
-            return Results.Ok(transactions);
-        })
-        .WithName("GetTransactionsByUser")
-        .Produces<List<TransactionResponse>>()
-        .WithOpenApi();
-
-        /// <summary>
-        /// Obtém uma transação específica pelo seu ID.
-        /// </summary>
-        group.MapGet("/{id}", async (int id, AppDbContext context) =>
-        {
-            var transaction = await context.Transactions
-                .AsNoTracking()
-                .Include(t => t.Category)
-                .FirstOrDefaultAsync(t => t.Id == id);
-
-            if (transaction is null)
-                return Results.NotFound();
-
-            var response = new TransactionResponse(
-                transaction.Id,
-                transaction.Description,
-                transaction.Amount,
-                transaction.Date,
-                transaction.Type,
-                transaction.Category.Name,
-                transaction.CategoryId);
-
-            return Results.Ok(response);
-        })
-        .WithName("GetTransactionById")
-        .Produces<TransactionResponse>()
-        .Produces(StatusCodes.Status404NotFound)
-        .WithOpenApi();
-
-        /// <summary>
-        /// Cria uma nova transação.
-        /// </summary>
-        group.MapPost("/", async (CreateTransactionRequest request, AppDbContext context) =>
-        {
-            if (!MiniValidator.TryValidate(request, out var errors))
-                return Results.ValidationProblem(errors);
-
-            var category = await context.Categories.FindAsync(request.CategoryId);
-            if (category is null)
-                return Results.BadRequest("Invalid CategoryId.");
-                
-            var user = await context.Users.FindAsync(request.UserId);
-            if (user is null)
-                return Results.BadRequest("Invalid UserId. User must exist before creating a transaction.");
-
-            var transaction = new Transaction
+            group.MapGet("/", async (AppDbContext context) =>
             {
-                Description = request.Description,
-                Amount = request.Amount,
-                Date = request.Date,
-                CategoryId = request.CategoryId,
-                UserId = request.UserId,
-                Type = category.Type // Define o tipo de transação com base em sua categoria
-            };
+                var transactions = await context.Transactions
+                    .Include(t => t.User)
+                    .Include(t => t.Category)
+                    .ToListAsync();
+                    
+                return Results.Ok(transactions);
+            })
+            .WithName("GetAllTransactions")
+            .WithOpenApi();
 
-            await context.Transactions.AddAsync(transaction);
-            await context.SaveChangesAsync();
+            group.MapGet("/{id}", async (int id, AppDbContext context) =>
+            {
+                var transaction = await context.Transactions
+                    .Include(t => t.User)
+                    .Include(t => t.Category)
+                    .FirstOrDefaultAsync(t => t.Id == id);
+                    
+                if (transaction == null)
+                    return Results.NotFound();
+                    
+                return Results.Ok(transaction);
+            })
+            .WithName("GetTransactionById")
+            .WithOpenApi();
 
-            var response = new TransactionResponse(
-                transaction.Id,
-                transaction.Description,
-                transaction.Amount,
-                transaction.Date,
-                transaction.Type,
-                category.Name,
-                transaction.CategoryId);
+            group.MapPost("/", async (CreateTransactionRequest request, AppDbContext context) =>
+            {
+                var user = await context.Users.FindAsync(request.UserId);
+                if (user == null)
+                    return Results.NotFound($"User with ID {request.UserId} not found");
 
-            return Results.Created($"/transactions/{transaction.Id}", response);
-        })
-        .WithName("CreateTransaction")
-        .Produces<TransactionResponse>(StatusCodes.Status201Created)
-        .Produces<ValidationProblemDetails>(StatusCodes.Status400BadRequest)
-        .WithOpenApi();
+                var category = await context.Categories.FindAsync(request.CategoryId);
+                if (category == null)
+                    return Results.NotFound($"Category with ID {request.CategoryId} not found");
 
-        /// <summary>
-        /// Atualiza uma transação existente.
-        /// </summary>
-        group.MapPut("/{id}", async (int id, CreateTransactionRequest request, AppDbContext context) =>
-        {
-            if (!MiniValidator.TryValidate(request, out var errors))
-                return Results.ValidationProblem(errors);
+                var transaction = new Transaction
+                {
+                    Description = request.Description,
+                    Amount = request.Amount,
+                    Date = request.Date,
+                    Type = request.Type,
+                    UserId = request.UserId,
+                    CategoryId = request.CategoryId
+                };
 
-            var transaction = await context.Transactions.FindAsync(id);
-            if (transaction is null)
-                return Results.NotFound();
-
-            var category = await context.Categories.FindAsync(request.CategoryId);
-            if (category is null)
-                return Results.BadRequest("Invalid CategoryId.");
+                await context.Transactions.AddAsync(transaction);
+                await context.SaveChangesAsync();
                 
-            var user = await context.Users.FindAsync(request.UserId);
-            if (user is null)
-                return Results.BadRequest("Invalid UserId.");
+                return Results.Created($"/transactions/{transaction.Id}", transaction);
+            })
+            .WithName("CreateTransaction")
+            .WithOpenApi();
 
-            transaction.Description = request.Description;
-            transaction.Amount = request.Amount;
-            transaction.Date = request.Date;
-            transaction.CategoryId = request.CategoryId;
-            transaction.UserId = request.UserId;
-            transaction.Type = category.Type;
+            group.MapPut("/{id}", async (int id, CreateTransactionRequest request, AppDbContext context) =>
+            {
+                var transaction = await context.Transactions.FindAsync(id);
+                if (transaction == null)
+                    return Results.NotFound();
 
-            context.Transactions.Update(transaction);
-            await context.SaveChangesAsync();
+                var user = await context.Users.FindAsync(request.UserId);
+                if (user == null)
+                    return Results.NotFound($"User with ID {request.UserId} not found");
 
-            return Results.NoContent();
-        })
-        .WithName("UpdateTransaction")
-        .Produces(StatusCodes.Status204NoContent)
-        .Produces<ValidationProblemDetails>(StatusCodes.Status400BadRequest)
-        .Produces(StatusCodes.Status404NotFound)
-        .WithOpenApi();
+                var category = await context.Categories.FindAsync(request.CategoryId);
+                if (category == null)
+                    return Results.NotFound($"Category with ID {request.CategoryId} not found");
 
-        /// <summary>
-        /// Exclui uma transação pelo seu ID.
-        /// </summary>
-        group.MapDelete("/{id}", async (int id, AppDbContext context) =>
-        {
-            var transaction = await context.Transactions.FindAsync(id);
-            if (transaction is null)
-                return Results.NotFound();
+                transaction.Description = request.Description;
+                transaction.Amount = request.Amount;
+                transaction.Date = request.Date;
+                transaction.Type = request.Type;
+                transaction.UserId = request.UserId;
+                transaction.CategoryId = request.CategoryId;
 
-            context.Transactions.Remove(transaction);
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+                return Results.Ok(transaction);
+            })
+            .WithName("UpdateTransaction")
+            .WithOpenApi();
 
-            return Results.NoContent();
-        })
-        .WithName("DeleteTransaction")
-        .Produces(StatusCodes.Status204NoContent)
-        .Produces(StatusCodes.Status404NotFound)
-        .WithOpenApi();
+            group.MapDelete("/{id}", async (int id, AppDbContext context) =>
+            {
+                var transaction = await context.Transactions.FindAsync(id);
+                if (transaction == null)
+                    return Results.NotFound();
+
+                context.Transactions.Remove(transaction);
+                await context.SaveChangesAsync();
+                
+                return Results.NoContent();
+            })
+            .WithName("DeleteTransaction")
+            .WithOpenApi();
+        }
+    }
+
+    public class CreateTransactionRequest
+    {
+        public string Description { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
+        public TransactionType Type { get; set; }
+        public int UserId { get; set; }
+        public int CategoryId { get; set; }
     }
 }

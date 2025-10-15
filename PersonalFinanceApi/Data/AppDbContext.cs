@@ -1,74 +1,46 @@
 using Microsoft.EntityFrameworkCore;
-using PersonalFinanceApi.Models;
+using PersonalFinanceAPI.Models;
 
-namespace PersonalFinanceApi.Data;
-
-/// <summary>
-/// O contexto do banco de dados para a aplicação.
-/// </summary>
-public class AppDbContext : DbContext
+namespace PersonalFinanceAPI.Data
 {
-    /// <summary>
-    /// Inicializa uma nova instância da classe <see cref="AppDbContext"/>.
-    /// </summary>
-    /// <param name="options">As opções para este contexto.</param>
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    public class AppDbContext : DbContext
     {
-    }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
-    /// <summary>
-    /// Obtém ou define o conjunto de usuários.
-    /// </summary>
-    public DbSet<User> Users { get; set; } = null!;
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
 
-    /// <summary>
-    /// Obtém ou define o conjunto de categorias.
-    /// </summary>
-    public DbSet<Category> Categories { get; set; } = null!;
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // User configuration
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
 
-    /// <summary>
-    /// Obtém ou define o conjunto de transações.
-    /// </summary>
-    public DbSet<Transaction> Transactions { get; set; } = null!;
+            // Category configuration
+            modelBuilder.Entity<Category>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Categories)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-    /// <summary>
-    /// Configura o esquema necessário para o framework de identidade.
-    /// </summary>
-    /// <param name="modelBuilder">O construtor que está sendo usado para construir o modelo para este contexto.</param>
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+            // Transaction configuration
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.Transactions)
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-        // Usuário para Transação (Um-para-Muitos)
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.Transactions)
-            .WithOne(t => t.User)
-            .HasForeignKey(t => t.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Transaction>()
+                .HasOne(t => t.Category)
+                .WithMany(c => c.Transactions)
+                .HasForeignKey(t => t.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-        // Categoria para Transação (Um-para-Muitos)
-        modelBuilder.Entity<Category>()
-            .HasMany(c => c.Transactions)
-            .WithOne(t => t.Category)
-            .HasForeignKey(t => t.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict); // Impede a exclusão de uma categoria se ela tiver transações
-
-        // Popular Categorias
-        modelBuilder.Entity<Category>().HasData(
-            // Categorias de Despesa
-            new { Id = 1, Name = "Food", Type = TransactionType.Expense },
-            new { Id = 2, Name = "Transportation", Type = TransactionType.Expense },
-            new { Id = 3, Name = "Housing", Type = TransactionType.Expense },
-            new { Id = 4, Name = "Utilities", Type = TransactionType.Expense },
-            new { Id = 5, Name = "Health", Type = TransactionType.Expense },
-            new { Id = 6, Name = "Entertainment", Type = TransactionType.Expense },
-            new { Id = 7, Name = "Other Expenses", Type = TransactionType.Expense },
-
-            // Categorias de Receita
-            new { Id = 8, Name = "Salary", Type = TransactionType.Income },
-            new { Id = 9, Name = "Freelance", Type = TransactionType.Income },
-            new { Id = 10, Name = "Investment", Type = TransactionType.Income },
-            new { Id = 11, Name = "Other Income", Type = TransactionType.Income }
-        );
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

@@ -1,27 +1,23 @@
-namespace PersonalFinanceApi.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-/// <summary>
-/// Representa uma categoria para transações.
-/// </summary>
-public class Category
+namespace PersonalFinanceAPI.Models
 {
-    /// <summary>
-    /// O identificador único para a categoria.
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
-    /// O nome da categoria.
-    /// </summary>
-    public string Name { get; set; } = string.Empty;
-
-    /// <summary>
-    /// O tipo de transação ao qual esta categoria se aplica (Receita ou Despesa).
-    /// </summary>
-    public TransactionType Type { get; set; }
-
-    /// <summary>
-    /// A lista de transações associadas a esta categoria.
-    /// </summary>
-    public List<Transaction> Transactions { get; set; } = new();
+    public class Category
+    {
+        public int Id { get; set; }
+        
+        [Required]
+        [StringLength(50)]
+        public string Name { get; set; } = string.Empty;
+        
+        [Required]
+        [StringLength(10)]
+        public string Type { get; set; } = "Expense";
+        
+        public int UserId { get; set; }
+        public User User { get; set; } = null!;
+        
+        public List<Transaction> Transactions { get; set; } = new();
+    }
 }

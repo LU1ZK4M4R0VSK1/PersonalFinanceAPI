@@ -1,27 +1,25 @@
-namespace PersonalFinanceApi.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-/// <summary>
-/// Representa um usuário no sistema.
-/// </summary>
-public class User
+namespace PersonalFinanceAPI.Models
 {
-    /// <summary>
-    /// O identificador único para o usuário.
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
-    /// O nome do usuário.
-    /// </summary>
-    public string Name { get; set; } = string.Empty;
-
-    /// <summary>
-    /// O endereço de e-mail do usuário.
-    /// </summary>
-    public string Email { get; set; } = string.Empty;
-
-    /// <summary>
-    /// A lista de transações associadas ao usuário.
-    /// </summary>
-    public List<Transaction> Transactions { get; set; } = new();
+    public class User
+    {
+        public int Id { get; set; }
+        
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
+        
+        [Required]
+        [EmailAddress]
+        [StringLength(150)]
+        public string Email { get; set; } = string.Empty;
+        
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        
+        // Navigation properties
+        public List<Transaction> Transactions { get; set; } = new();
+        public List<Category> Categories { get; set; } = new();
+    }
 }

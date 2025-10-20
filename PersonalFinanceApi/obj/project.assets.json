@@ -3687,19 +3687,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\luani\\.nuget\\packages\\": {}
+    "C:\\Users\\PC\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\luani\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
+      "projectUniqueName": "C:\\Users\\PC\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
       "projectName": "PersonalFinanceApi",
-      "projectPath": "C:\\Users\\luani\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
-      "packagesPath": "C:\\Users\\luani\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\luani\\PersonalFinanceAPI\\PersonalFinanceApi\\obj\\",
+      "projectPath": "C:\\Users\\PC\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
+      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\PC\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\luani\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -3717,6 +3717,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3765,7 +3770,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.121/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

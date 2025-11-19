@@ -1,5 +1,5 @@
 import { api } from './api';
-import { Transaction, TransactionFormData } from '@/types';
+import type { Transaction, TransactionFormData } from '../types';
 export const transactionService = {
 async getAll(): Promise<Transaction[]> {
 const response = await api.get<Transaction[]>('/transactions');

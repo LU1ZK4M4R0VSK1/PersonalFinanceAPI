@@ -1,5 +1,5 @@
 import { api } from './api';
-import { Category, CategoryFormData } from '@/types';
+import type { Category, CategoryFormData } from '../types';
 export const categoryService = {
 async getAll(): Promise<Category[]> {
 const response = await api.get<Category[]>('/categories');

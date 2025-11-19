@@ -7,21 +7,24 @@ import Transacoes from "./pages/Transacoes";
 import Categorias from "./pages/Categorias";
 import Relatorios from "./pages/Relatorios";
 import NotFound from "./pages/NotFound";
+import Layout from "./components/Layout";
 
 // Criando o cliente para gerenciamento de dados
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
           <Route path="/" element={<Inicio />} />
           <Route path="/transacoes" element={<Transacoes />} />
           <Route path="/categorias" element={<Categorias />} />
           <Route path="/relatorios" element={<Relatorios />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </QueryClientProvider>
 );
 

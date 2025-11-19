@@ -3687,19 +3687,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {}
+    "C:\\Users\\luiz.kamarovski\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
+      "projectUniqueName": "C:\\Users\\luiz.kamarovski\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
       "projectName": "PersonalFinanceApi",
-      "projectPath": "C:\\Users\\PC\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\obj\\",
+      "projectPath": "C:\\Users\\luiz.kamarovski\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\PersonalFinanceApi.csproj",
+      "packagesPath": "C:\\Users\\luiz.kamarovski\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\luiz.kamarovski\\Documents\\PersonalFinanceAPI\\PersonalFinanceApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\luiz.kamarovski\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"

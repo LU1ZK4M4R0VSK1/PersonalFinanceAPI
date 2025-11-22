@@ -5,16 +5,9 @@ interface StatCardProps {
     title: string;
     value: string | number;
     icon: LucideIcon;
-    variant?: 'default' | 'success' | 'destructive';
 }
 
-export const StatCard = ({ title, value, icon: Icon, variant = 'default' }: StatCardProps) => {
-    const iconColors = {
-        default: 'text-blue-500',
-        success: 'text-green-500',
-        destructive: 'text-red-500',
-    };
-
+export const StatCard = ({ title, value, icon: Icon }: StatCardProps) => {
     return (
         <Card>
             <CardContent className="p-4">
@@ -23,7 +16,7 @@ export const StatCard = ({ title, value, icon: Icon, variant = 'default' }: Stat
                         <p className="text-xs text-muted-foreground mb-1">{title}</p>
                         <p className="text-2xl font-bold">{value}</p>
                     </div>
-                    <Icon className={`h-8 w-8 ${iconColors[variant]}`} />
+                    <Icon className="h-8 w-8 text-blue-500" />
                 </div>
             </CardContent>
         </Card>

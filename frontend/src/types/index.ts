@@ -5,8 +5,6 @@ export interface Transaction {
     type: 'income' | 'expense';
     category_id: string;
     date: string;
-    created_at: string;
-    updated_at: string;
 }
 
 export interface TransactionFormData {
@@ -21,8 +19,6 @@ export interface Category {
     id: string;
     name: string;
     type: 'income' | 'expense';
-    created_at: string;
-    updated_at: string;
 }
 
 export interface CategoryFormData {

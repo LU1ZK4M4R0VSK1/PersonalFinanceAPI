@@ -1,32 +1,9 @@
 import { api } from './api';
-import type { Transaction, TransactionFormData } from '../types';
+import { Transaction, TransactionFormData } from '@/types';
+
 export const transactionService = {
-async getAll(): Promise<Transaction[]> {
-const response = await api.get<Transaction[]>('/transactions');
-return response.data;
-},
-async getById(id: string): Promise<Transaction> {
-const response = await api.get<Transaction>(`/transactions/${id}`);
-return response.data;
-},
-async create(data: TransactionFormData): Promise<Transaction> {
-const response = await api.post<Transaction>('/transactions', data);
-return response.data;
-},
-async update(id: string, data: Partial<TransactionFormData>):
-Promise<Transaction> {
-const response = await api.put<Transaction>(`/transactions/${id}`,
-data);
-return response.data;
-},
-async delete(id: string): Promise<void> {
-await api.delete(`/transactions/${id}`);
-},
-async getByDateRange(startDate: string, endDate: string):
-Promise<Transaction[]> {
-const response = await api.get<Transaction[]>('/transactions', {
-params: { startDate, endDate }
-});
-return response.data;
-}
+    async getAll() { return (await api.get<Transaction[]>('/transactions')).data; },
+    async create(data: TransactionFormData) { return (await api.post<Transaction>('/transactions', data)).data; },
+    async update(id: string, data: Partial<TransactionFormData>) { return (await api.put<Transaction>(`/transactions/${id}`, data)).data; },
+    async delete(id: string) { await api.delete(`/transactions/${id}`); }
 };

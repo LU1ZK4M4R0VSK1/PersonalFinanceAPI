@@ -10,9 +10,9 @@ interface StatCardProps {
 
 export const StatCard = ({ title, value, icon: Icon, variant = 'default' }: StatCardProps) => {
     const iconColors = {
-        default: 'text-primary',
-        success: 'text-success',
-        destructive: 'text-destructive',
+        default: 'text-blue-500',
+        success: 'text-green-500',
+        destructive: 'text-red-500',
     };
 
     return (

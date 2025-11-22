@@ -1,92 +1,116 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { categoryService } from "../services/categoryService";
-import CreateCategoryForm from "../components/CreateCategoryForm";
-import EditCategoryForm from "../components/EditCategoryForm";
-import type { Category } from "../types";
+import { useState } from 'react';
+import { Plus, Trash2, Pencil } from 'lucide-react';
+import { useCategories } from '@/hooks/useCategories';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { CategoryForm } from '@/components/Forms/CategoryForm';
 
 const Categorias = () => {
-  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const queryClient = useQueryClient();
+    const { categories, loading, createCategory, updateCategory, deleteCategory } = useCategories();
+    const [isOpen, setIsOpen] = useState(false);
+    const [editing, setEditing] = useState<any>(null);
 
-  const { data: categories, isLoading, isError } = useQuery({
-    queryKey: ["categories"],
-    queryFn: categoryService.getAll,
-  });
+    const handleSubmit = async (data: any) => {
+        let success = false;
+        
+        if (editing) {
+            success = await updateCategory(editing.id, data);
+        } else {
+            success = await createCategory(data);
+        }
+        
+        if (success) {
+            setIsOpen(false); 
+            setEditing(null);
+        }
+    };
 
-  const deleteMutation = useMutation({
-    mutationFn: categoryService.delete,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-    },
-  });
+    const handleDelete = async (id: string) => {
+        if (confirm('Tem certeza que deseja excluir esta categoria?')) {
+            await deleteCategory(id);
+        }
+    };
 
-  const handleEditClick = (category: Category) => {
-    setSelectedCategory(category);
-    setEditModalOpen(true);
-  };
+    if (loading) {
+        return <div>Carregando categorias...</div>;
+    }
 
-  if (isLoading) {
-    return <div className="p-6">Loading...</div>;
-  }
-
-  if (isError) {
-    return <div className="p-6">Error fetching categories.</div>;
-  }
-
-  return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">Categorias</h1>
-        <button
-          onClick={() => setCreateModalOpen(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Create Category
-        </button>
-      </div>
-      {isCreateModalOpen && <CreateCategoryForm onClose={() => setCreateModalOpen(false)} />}
-      {isEditModalOpen && selectedCategory && (
-        <EditCategoryForm
-          category={selectedCategory}
-          onClose={() => setEditModalOpen(false)}
-        />
-      )}
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th className="py-2">Name</th>
-            <th className="py-2">Type</th>
-            <th className="py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories?.map((category) => (
-            <tr key={category.id}>
-              <td className="border px-4 py-2">{category.name}</td>
-              <td className="border px-4 py-2">{category.type}</td>
-              <td className="border px-4 py-2">
-                <button
-                  onClick={() => handleEditClick(category)}
-                  className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => deleteMutation.mutate(category.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+    return (
+        <div className="space-y-4">
+            <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold">Categorias</h1>
+                <Button onClick={() => setIsOpen(true)}>
+                    <Plus className="mr-2 h-4 w-4" /> Nova Categoria
+                </Button>
+            </div>
+            
+            <div className="grid gap-4 md:grid-cols-2">
+                {['income', 'expense'].map(type => (
+                    <Card key={type}>
+                        <CardHeader>
+                            <CardTitle>
+                                {type === 'income' ? 'Receitas' : 'Despesas'}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                            {categories
+                                .filter(c => c.type === type)
+                                .map(c => (
+                                    <div key={c.id} className="flex justify-between items-center p-2 border rounded">
+                                        <span>{c.name}</span>
+                                        <div className="flex gap-1">
+                                            <Button 
+                                                variant="ghost" 
+                                                size="icon" 
+                                                onClick={() => { 
+                                                    setEditing(c); 
+                                                    setIsOpen(true); 
+                                                }}
+                                            >
+                                                <Pencil className="h-4 w-4"/>
+                                            </Button>
+                                            <Button 
+                                                variant="ghost" 
+                                                size="icon" 
+                                                onClick={() => handleDelete(c.id)}
+                                            >
+                                                <Trash2 className="h-4 w-4 text-red-500"/>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                            
+                            {categories.filter(c => c.type === type).length === 0 && (
+                                <p className="text-center text-sm text-muted-foreground">
+                                    Vazio
+                                </p>
+                            )}
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+            
+            <Dialog open={isOpen} onOpenChange={(open) => { 
+                if (!open) setEditing(null); 
+                setIsOpen(open); 
+            }}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {editing ? 'Editar' : 'Nova'} Categoria
+                        </DialogTitle>
+                    </DialogHeader>
+                    <CategoryForm 
+                        category={editing} 
+                        onSubmit={handleSubmit} 
+                        onCancel={() => setIsOpen(false)} 
+                    />
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
 };
 
 export default Categorias;

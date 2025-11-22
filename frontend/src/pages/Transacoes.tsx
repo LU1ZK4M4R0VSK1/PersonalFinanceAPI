@@ -1,96 +1,87 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { transactionService } from "../services/transactionService";
-import CreateTransactionForm from "../components/CreateTransactionForm";
-import EditTransactionForm from "../components/EditTransactionForm";
-import type { Transaction } from "../types";
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+
+// Mock data temporário
+const mockTransactions = [
+    { id: '1', description: 'Salário', amount: 3000, type: 'income' as const },
+    { id: '2', description: 'Aluguel', amount: 1200, type: 'expense' as const },
+];
+
+const mockCategories = [
+    { id: '1', name: 'Salário', type: 'income' as const },
+    { id: '2', name: 'Moradia', type: 'expense' as const },
+];
 
 const Transacoes = () => {
-  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
-  const queryClient = useQueryClient();
+    const [transactions, setTransactions] = useState(mockTransactions);
+    const [isOpen, setIsOpen] = useState(false);
+    
+    const format = (v: number) => new Intl.NumberFormat('pt-BR', { 
+        style: 'currency', 
+        currency: 'BRL' 
+    }).format(v);
 
-  const { data: transactions, isLoading, isError } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: transactionService.getAll,
-  });
+    const handleSubmit = async (data: any) => {
+        // Mock - adiciona transação localmente
+        const newTransaction = {
+            id: Date.now().toString(),
+            ...data,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        };
+        setTransactions(prev => [newTransaction, ...prev]);
+        setIsOpen(false);
+    };
 
-  const deleteMutation = useMutation({
-    mutationFn: transactionService.delete,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
-    },
-  });
-
-  const handleEditClick = (transaction: Transaction) => {
-    setSelectedTransaction(transaction);
-    setEditModalOpen(true);
-  };
-
-  if (isLoading) {
-    return <div className="p-6">Loading...</div>;
-  }
-
-  if (isError) {
-    return <div className="p-6">Error fetching transactions.</div>;
-  }
-
-  return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">Transações</h1>
-        <button
-          onClick={() => setCreateModalOpen(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Create Transaction
-        </button>
-      </div>
-      {isCreateModalOpen && <CreateTransactionForm onClose={() => setCreateModalOpen(false)} />}
-      {isEditModalOpen && selectedTransaction && (
-        <EditTransactionForm
-          transaction={selectedTransaction}
-          onClose={() => setEditModalOpen(false)}
-        />
-      )}
-      <table className="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th className="py-2">Description</th>
-            <th className="py-2">Amount</th>
-            <th className="py-2">Type</th>
-            <th className="py-2">Date</th>
-            <th className="py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions?.map((transaction) => (
-            <tr key={transaction.id}>
-              <td className="border px-4 py-2">{transaction.description}</td>
-              <td className="border px-4 py-2">{transaction.amount}</td>
-              <td className="border px-4 py-2">{transaction.type}</td>
-              <td className="border px-4 py-2">{new Date(transaction.date).toLocaleDateString()}</td>
-              <td className="border px-4 py-2">
-                <button
-                  onClick={() => handleEditClick(transaction)}
-                  className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => deleteMutation.mutate(transaction.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+    return (
+        <div className="space-y-4">
+            <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold">Transações</h1>
+                <Button onClick={() => setIsOpen(true)}>
+                    <Plus className="mr-2 h-4 w-4" /> Nova Transação
+                </Button>
+            </div>
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle>Todas as Transações</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                    {transactions.map(t => (
+                        <div key={t.id} className="flex justify-between p-3 border rounded">
+                            <span className="font-medium">{t.description}</span>
+                            <span className={t.type === 'income' ? 'text-green-600' : 'text-red-600'}>
+                                {format(t.amount)}
+                            </span>
+                        </div>
+                    ))}
+                    
+                    {transactions.length === 0 && (
+                        <p className="text-center text-muted-foreground">
+                            Nenhuma transação encontrada.
+                        </p>
+                    )}
+                </CardContent>
+            </Card>
+            
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Nova Transação</DialogTitle>
+                    </DialogHeader>
+                    <div className="p-4">
+                        <p>Formulário de transação aparecerá aqui quando os hooks estiverem configurados.</p>
+                        <Button onClick={() => setIsOpen(false)} className="mt-4">
+                            Fechar
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
 };
 
 export default Transacoes;

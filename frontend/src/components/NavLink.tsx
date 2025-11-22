@@ -1,20 +1,19 @@
-import { NavLink as RouterNavLink } from 'react-router-dom';
-import type { NavLinkProps as RouterNavLinkProps } from 'react-router-dom';
+import { NavLink as RouterNavLink, NavLinkProps as RouterNavLinkProps } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 interface NavLinkProps extends RouterNavLinkProps {
-  activeClassName?: string;
+    activeClassName?: string;
 }
 
 export const NavLink = ({ className, activeClassName, children, ...props }: NavLinkProps) => {
-  return (
-    <RouterNavLink
-      className={({ isActive }) =>
-        cn(className, isActive && activeClassName)
-      }
-      {...props}
-    >
-      {children}
-    </RouterNavLink>
-  );
+    return (
+        <RouterNavLink
+            className={({ isActive }) =>
+                cn(className, isActive && activeClassName)
+            }
+            {...props}
+        >
+            {children}
+        </RouterNavLink>
+    );
 };
